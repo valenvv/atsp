@@ -224,7 +224,7 @@ def VND(G, tour): #clase metaheuristica # O(n^4)
     k = 0
     while k < k_max:
         if k == 0:
-            tour_nuevo, costo_nuevo_tour = relocate(G, tour)
+            tour_nuevo, costo_nuevo_tour = relocate(G, tour) 
         elif k == 1:
             tour_nuevo, costo_nuevo_tour = atsp_2opt(G, tour)
 
