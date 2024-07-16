@@ -1,4 +1,3 @@
-#esto me tiro chat
 import os
 import json
 import networkx as nx
@@ -25,7 +24,7 @@ def atsp_file(filename):
             row = list(map(int, line.split()))
             matrix.extend(row)
         
-        # Convertir la lista plana en una matriz
+        # Convertir la lista en una matriz
         matrix = [matrix[i:i + dimension] for i in range(0, len(matrix), dimension)]
         
     return matrix, dimension
@@ -264,88 +263,30 @@ def main():
     # filename = 'br17.atsp'
     # filename = 'ft53.atsp'
     # filename = 'ft70.atsp'
-    # filename = 'ftv33.atsp'
+    # filename = 'ftv33.atsp'  
     # filename = 'ftv35.atsp'
     # filename = 'ftv38.atsp'
-    # filename = 'ftv44.atsp'
+    filename = 'ftv44.atsp'  
     # filename = 'ftv47.atsp'
     # filename = 'ftv55.atsp'
     # filename = 'ftv64.atsp'
     # filename = 'ftv70.atsp'
-    filename = 'ftv170.atsp'
-    # filename = 'kro124p.atsp'
-    # filename = 'p43.atsp'
+    # filename = 'ftv170.atsp'  
+    # filename = 'kro124p.atsp' 
+    # filename = 'p43.atsp'      
     # filename = 'rbg323.atsp'
     # filename = 'rbg358.atsp'
     # filename = 'rbg403.atsp'
     # filename = 'rbg443.atsp'
-    # filename = 'ry48p.atsp'
-
-
+    # filename = 'ry48p.atsp' 
     
     matrix, dimension = atsp_file(filename)
     G = create_graph_from_matrix(matrix, dimension)
 
     tour_inicial = tour_hamiltoniano_basico(G)
-    
 
     # Verificar G
     print("Nodos en G:", G.nodes)
-    # print("Aristas en G:", G.edges(data=True))
-
-    ''' 
-    # ATSP insertion algorithm
-    inicio = time.time()
-    cost, solucion = atsp_insercion(G)
-    print("El costo mínimo es atsp insercion:", cost)
-    print("Tiempo de ejecución de atsp insercion:", time.time() - inicio, "segundos")
-    # print("La ruta en atsp insercion es:", solucion)
-
-    # Nearest neighbor algorithm
-    inicio = time.time()
-    tour = vecino_mas_cercano(G, 0)
-    costo= costo_tour(G, tour)
-    print("El costo mínimo es vecino cercano:", costo)
-    # print("Tour :", tour)
-    
-    
-    #Camino inicial
-    initial_path = tour_hamiltoniano_basico(G)
-    #Aplicar 2-opt para ATSP
-    optimal_path, optimal_length = atsp_2opt(G, vecino_mas_cercano(G,0))
-    print("Longitud minima 2opt:", optimal_length)
-    # print("Camino optimo 2opt:", optimal_path)
-    
-
-    ## notar que swap mejora dependiendo del tur inicial
-    ## con el basico 0,1,2... n anda horrible = 167
-    ## con vecino mas cercano = 92
-    ## con atsp insertion =39
-    cosot, solucion = atsp_insercion(G)
-    # optimal_path1, optimal_length1 =atsp_swap(G, vecino_mas_cercano(G,0))
-    # print("Longitud minima swap:", optimal_length1)
-    # print("Camino optimo swap:", optimal_path1)
-    
-
-    ##initial_path = 97
-    ## atsp inertion (solucion) = 39
-    ## vecino_mas_cercano(G,0) = 78
-    optimal_path2, optimal_length2 =relocate(G, initial_path)
-    print("Longitud minima relocate:", optimal_length2)
-    # print("Camino optimo relocate:", optimal_path2)
-    
-
-    ##initial_path = 75
-    ## atsp inertion (solucion)  = 39
-    ## vecino_mas_cercano(G,0) = 42
-    vnd, cost_vnd= VND(G, solucion)
-    print("VND costo:",cost_vnd)
-    # print("VND:",vnd)
-    
-    ######### ejercicio 3 #################### vecino_mas_cercano
-    goloso_con_busqueda_local(G, 0, "atsp_insercion")
-    # print("Longitud minima ejer 3:", optimal_length3)
-    # print("Camino optimo ejer 3:", optimal_path3)
 
     ############### ej EXTRA #######################
     # Reducir el ATSP a un TSP
@@ -353,7 +294,7 @@ def main():
     # tour_inicial = list(G_tsp.nodes)
     # tour_final, costo_final = tsp_2opt(G_tsp, tour_inicial)
     # print("Costo final:", costo_final)
-    '''
+    
     
     # Medir tiempo para ATSP insertion algorithm
     inicio = time.time()
