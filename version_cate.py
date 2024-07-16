@@ -194,7 +194,7 @@ def relocate(G, tour): # O(n^4)
 
 
 ################ EJERCICIO 3 #############################
-def goloso_con_busqueda_local(G, nodo_inicial, heuristica_constructiva): # O(n^4)
+def goloso_con_busqueda_local_2opt(G, nodo_inicial, heuristica_constructiva): # O(n^4)
     
     if heuristica_constructiva == "vecino_mas_cercano": 
         inicio = time.time()
@@ -211,12 +211,24 @@ def goloso_con_busqueda_local(G, nodo_inicial, heuristica_constructiva): # O(n^4
     print("costo ej3 con 2-opt:", costo_mejorada_2opt)
     print("Tiempo 2opt:", time.time() - inicio, "segundos")
     
+   
+def goloso_con_busqueda_local_relocate(G, nodo_inicial, heuristica_constructiva): # O(n^4)
+    
+    if heuristica_constructiva == "vecino_mas_cercano": 
+        inicio = time.time()
+        tour_inicial = vecino_mas_cercano(G, nodo_inicial)  # O(n^2)
+    elif heuristica_constructiva == "atsp_insercion":
+        inicio = time.time()
+        costo, tour_inicial = atsp_insercion(G)  # O(n^3)
+    else:
+        raise ValueError("Heurística constructiva no válida.")
+
 
     # Búsqueda local relocate
     tour_mejorado_relocate, costo_mejorada_relocate = relocate(G, tour_inicial)  # O(n^4)
     # print("Tour mejorado con relocate:", tour_mejorado_relocate)
     print("costo ej3 con relocate:", costo_mejorada_relocate)
-    print("Tiempo relocate:", time.time() - inicio, "segundos")
+    print("Tiempo ej3 relocate:", time.time() -inicio, "segundos")
    
     
 
@@ -277,8 +289,8 @@ def main():
     # filename = 'ftv55.atsp'
     # filename = 'ftv64.atsp'
     # filename = 'ftv70.atsp'
-    # filename = 'ftv170.atsp'  
-    filename = 'kro124p.atsp' 
+    filename = 'ftv170.atsp'  
+    # filename = 'kro124p.atsp' 
     # filename = 'p43.atsp'      
     # filename = 'rbg323.atsp'
     # filename = 'rbg358.atsp'
@@ -344,15 +356,17 @@ def main():
     print("VND costo con vecino:", cost_vnd)
     print("Tiempo de ejecución de VND con vecino:", time.time() - inicio, "segundos")
 
-    # Medir tiempo para goloso_con_busqueda_local
-    inicio = time.time()
-    goloso_con_busqueda_local(G, 0, "atsp_insercion")
-    print("Tiempo de ejecución de goloso con búsqueda local AI:", time.time() - inicio, "segundos")
+    # Medir tiempo para goloso_con_busqueda_local AI
+    print("Tiempo de ejecución de goloso con búsqueda local AI:")
+    goloso_con_busqueda_local_2opt(G, 0, "atsp_insercion")
+    goloso_con_busqueda_local_relocate(G, 0, "atsp_insercion")
+    
 
-    # Medir tiempo para goloso_con_busqueda_local
-    inicio = time.time()
-    goloso_con_busqueda_local(G, 0, "vecino_mas_cercano")
-    print("Tiempo de ejecución de goloso con búsqueda local VC:", time.time() - inicio, "segundos")
+    # Medir tiempo para goloso_con_busqueda_local VC
+    print("Tiempo de ejecución de goloso con búsqueda local VC:")
+    goloso_con_busqueda_local_2opt(G, 0, "vecino_mas_cercano")
+    goloso_con_busqueda_local_relocate(G, 0, "vecino_mas_cercano")
+    
 
 if __name__ == "__main__":
     main()
