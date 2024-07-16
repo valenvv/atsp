@@ -53,9 +53,9 @@ def tour_hamiltoniano_basico(G):
 
 ############### EJERCICIO 1 #####################################
 '''Algoritmo goloso 1'''
-def vecino_mas_cercano(G, nodo_inicial):
+def vecino_mas_cercano(G, nodo_inicial): # O(n^2)
     # Initialize variables
-    n = len(G.nodes)
+    n = len(G.nodes) 
     noVisitado = set(G.nodes)
     tour = [nodo_inicial]
     current_node = nodo_inicial
@@ -88,7 +88,7 @@ def vecino_mas_cercano(G, nodo_inicial):
 '''algoritmo goloso 2''' 
 UNDEF = float('inf')
 
-def elegir_nodo(visitado, G, solucion, mas_cercano=True):
+def elegir_nodo(visitado, G, solucion, mas_cercano=True): # O(n^2)
     cost = UNDEF
     w = -1
     for u in solucion:
@@ -98,7 +98,7 @@ def elegir_nodo(visitado, G, solucion, mas_cercano=True):
                 w = v
     return w
 
-def insertar_nodo(v, G, solucion):
+def insertar_nodo(v, G, solucion): # O(n)
     min_u = solucion[-1]
     min_w = solucion[0]
     min_diff = G[min_u][v]['weight'] + G[v][min_w]['weight'] - G[min_u][min_w]['weight']
@@ -112,7 +112,7 @@ def insertar_nodo(v, G, solucion):
             min_w = w
     return min_u, min_w
 
-def atsp_insercion(G, mas_cercano=True):
+def atsp_insercion(G, mas_cercano=True): # O(n^3)
     visitado = {node: False for node in G.nodes}
     # Start with an initial cycle of three nodes
     solucion = [0, 1, 2]
@@ -135,7 +135,7 @@ def atsp_insercion(G, mas_cercano=True):
 
 ############### EJERCICIO 2 #####################################
 
-def costo_tour(G, tour):
+def costo_tour(G, tour): # O(n)
     #Calcula la longitud total del camino en un grafo G
     costo = 0
     n = len(tour)
@@ -145,38 +145,13 @@ def costo_tour(G, tour):
         costo += G[u][v]['weight']
     return costo
 
-def atsp_2opt(G, tour_inicial):
-    # Aplica el operador 2-opt para ATSP en un grafo G y un camino inicial
-    n = len(tour_inicial)
-    tour_actual = np.array(tour_inicial)  # Convertir a numpy array para manejar eficientemente
-    costo_actual = costo_tour(G, tour_actual)
 
-    mejora = True
-    while mejora:
-        mejora = False
-        for i in range(1, n - 2):
-            for j in range(i + 1, n - 1):
-                # Realizar el intercambio 2-opt
-                nuevo_tour = np.copy(tour_actual)  # Copiar el tour actual con numpy
-                nuevo_tour[i+1:j+1] = np.flip(tour_actual[i+1:j+1])  # Aplicar el intercambio 2-opt con numpy
-                nuevo_costo = costo_tour(G, nuevo_tour.tolist())  # Convertir de nuevo a lista para calcular el costo
-
-                # Verificar si el nuevo camino es mejor
-                if nuevo_costo < costo_actual:
-                    tour_actual = nuevo_tour.copy()  # Actualizar el tour actual
-                    costo_actual = nuevo_costo
-                    mejora = True
-                    break
-            if mejora:
-                break
-
-    return tour_actual.tolist(), costo_actual
 '''Busqueda local 1: 2-OPT'''
-'''def do_2opt(tour, i, j):
+def do_2opt(tour, i, j): # O(n)
     #Realiza un intercambio 2-opt en el camino
     tour[i+1:j+1] = reversed(tour[i+1:j+1])
 
-def atsp_2opt(G, tour_inicial):
+def atsp_2opt(G, tour_inicial): # O(n^4)
     #Aplica el operador 2-opt para ATSP en un grafo G y un camino inicial
     n = len(tour_inicial) 
     tour_actual = tour_inicial.copy()
@@ -201,45 +176,10 @@ def atsp_2opt(G, tour_inicial):
             if mejora:
                 break
     
-    return tour_actual, costo_actual'''
-
-
-'''Busqueda local 1: 2-OPT'''
-'''def do_2opt(tour, i, j):
-    #Realiza un intercambio 2-opt en el camino
-    tour[i+1:j+1] = reversed(tour[i+1:j+1])
-
-def atsp_2opt(G, tour_inicial):
-    #Aplica el operador 2-opt para ATSP en un grafo G y un camino inicial
-    n = len(tour_inicial)
-    tour_actual = tour_inicial.copy()
-    costo_actual = costo_tour(G, tour_actual)
-
-    mejora = True
-    while mejora:
-        mejora = False
-        for i in range(1, n - 2):
-            for j in range(i + 1, n - 1):
-                # Realizar el intercambio 2-opt directamente en tour_actual
-                do_2opt(tour_actual, i, j)
-                nuevo_costo = costo_tour(G, tour_actual)
-
-                # Verificar si el nuevo camino es mejor
-                if nuevo_costo < costo_actual:
-                    costo_actual = nuevo_costo
-                    mejora = True
-
-        # Si se encontró una mejora, reiniciar el bucle desde el principio
-        if mejora:
-            continue
-
-        # Si no se encontró ninguna mejora, salir del bucle
-        break
-
     return tour_actual, costo_actual
-'''
+
 '''Busqueda local 2: RELOCATE'''
-def relocate(G, tour):
+def relocate(G, tour): # O(n^4)
     n = len(tour)
     mejora = True
     while mejora:
@@ -254,22 +194,22 @@ def relocate(G, tour):
 
 
 ################ EJERCICIO 3 #############################
-def goloso_con_busqueda_local(G, nodo_inicial, heuristica_constructiva):
-    if heuristica_constructiva == "vecino_mas_cercano":
-        tour_inicial = vecino_mas_cercano(G, nodo_inicial)
+def goloso_con_busqueda_local(G, nodo_inicial, heuristica_constructiva): # O(n^4)
+    if heuristica_constructiva == "vecino_mas_cercano": 
+        tour_inicial = vecino_mas_cercano(G, nodo_inicial)  # O(n^2)
     elif heuristica_constructiva == "atsp_insercion":
-        costo, tour_inicial = atsp_insercion(G)
+        costo, tour_inicial = atsp_insercion(G)  # O(n^3)
     else:
         raise ValueError("Heurística constructiva no válida.")
 
     # Búsqueda local 2-opt
-    tour_mejorado_2opt, costo_mejorada_2opt = atsp_2opt(G, tour_inicial)
+    tour_mejorado_2opt, costo_mejorada_2opt = atsp_2opt(G, tour_inicial)  # O(n^4)
     # print("Tour mejorado con 2-opt:", tour_mejorado_2opt)
     print("costo ej3 con 2-opt:", costo_mejorada_2opt)
     
 
     # Búsqueda local relocate
-    tour_mejorado_relocate, costo_mejorada_relocate = relocate(G, tour_inicial)
+    tour_mejorado_relocate, costo_mejorada_relocate = relocate(G, tour_inicial)  # O(n^4)
     # print("Tour mejorado con relocate:", tour_mejorado_relocate)
     print("costo ej3 con relocate:", costo_mejorada_relocate)
    
@@ -279,7 +219,7 @@ def goloso_con_busqueda_local(G, nodo_inicial, heuristica_constructiva):
 ####################### para experimentacion ###########################################
 
 
-def VND(G, tour): #clase metaheuristica
+def VND(G, tour): #clase metaheuristica # O(n^4)
     k_max = 2
     k = 0
     while k < k_max:
@@ -453,7 +393,12 @@ def main():
     # Medir tiempo para goloso_con_busqueda_local
     inicio = time.time()
     goloso_con_busqueda_local(G, 0, "atsp_insercion")
-    print("Tiempo de ejecución de goloso con búsqueda local:", time.time() - inicio, "segundos")
+    print("Tiempo de ejecución de goloso con búsqueda local AI:", time.time() - inicio, "segundos")
+
+    # Medir tiempo para goloso_con_busqueda_local
+    inicio = time.time()
+    goloso_con_busqueda_local(G, 0, "vecino_mas_cercano")
+    print("Tiempo de ejecución de goloso con búsqueda local VC:", time.time() - inicio, "segundos")
 
 if __name__ == "__main__":
     main()
