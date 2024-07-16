@@ -1,10 +1,5 @@
-import os
-import json
 import networkx as nx
 import matplotlib.pyplot as plt
-import math
-import pprint
-import copy
 import numpy as np
 import time
 
@@ -41,20 +36,18 @@ def create_graph_from_matrix(matrix, dimension):
     return G
 
 def tour_hamiltoniano_basico(G):
-    # Obtener la lista de nodos en el grafo
     nodos = list(G.nodes)
-    nodos.sort()  # Ordenar los nodos en orden numérico
+    nodos.sort() 
     
-    # Construir el tour como un circuito hamiltoniano básico
+    # Construir circuito hamiltoniano
     tour = nodos + [nodos[0]]  # Agregar el primer nodo al final para cerrar el circuito
     
     return tour
 
 
-############### EJERCICIO 1 #####################################
+##################################### EJERCICIO 1 #####################################
 '''Algoritmo goloso 1'''
 def vecino_mas_cercano(G, nodo_inicial): # O(n^2)
-    # Initialize variables
     n = len(G.nodes) 
     noVisitado = set(G.nodes)
     tour = [nodo_inicial]
@@ -65,7 +58,7 @@ def vecino_mas_cercano(G, nodo_inicial): # O(n^2)
         costo_minimo = float('inf')
         next_node = None
         
-        # Find the neighbor with the minimum edge cost (forward or backward)
+        # Encontrar el vecino con el menor costo de arista (ya sea hacia adelante o hacia atrás)
         for neighbor in noVisitado:
             costo_adelante = G[current_node][neighbor]['weight']
             costo_atras = G[neighbor][current_node]['weight']
@@ -74,13 +67,11 @@ def vecino_mas_cercano(G, nodo_inicial): # O(n^2)
             if cost < costo_minimo:
                 costo_minimo = cost
                 next_node = neighbor
-        
-        # Move to the next node
+
         tour.append(next_node)
         current_node = next_node
         noVisitado.remove(current_node)
-    
-    # Return to the start node to complete the tour
+        
     tour.append(nodo_inicial)
     
     return tour
@@ -93,7 +84,8 @@ def elegir_nodo(visitado, G, solucion, mas_cercano=True): # O(n^2)
     w = -1
     for u in solucion:
         for v in G.nodes:
-            if not visitado[v] and ((mas_cercano and G[u][v]['weight'] < cost) or (not mas_cercano and G[u][v]['weight'] > cost) or cost == UNDEF): #aca iene en cuenta la asimetria pero no entendi como
+            # Considera nodos no visitados y decide basado en la heurística de cercanía o lejanía
+            if not visitado[v] and ((mas_cercano and G[u][v]['weight'] < cost) or (not mas_cercano and G[u][v]['weight'] > cost) or cost == UNDEF):
                 cost = G[u][v]['weight']
                 w = v
     return w
@@ -114,7 +106,7 @@ def insertar_nodo(v, G, solucion): # O(n)
 
 def atsp_insercion(G, mas_cercano=True): # O(n^3)
     visitado = {node: False for node in G.nodes}
-    # Start with an initial cycle of three nodes
+    # Comenzar con un ciclo inicial de tres nodos
     solucion = [0, 1, 2]
     visitado[0] = visitado[1] = visitado[2] = True
     costo = G[0][1]['weight'] + G[1][2]['weight'] + G[2][0]['weight']
@@ -129,14 +121,13 @@ def atsp_insercion(G, mas_cercano=True): # O(n^3)
         else:
             solucion.insert(solucion.index(w), min_v)
     
-    # Close the tour
     solucion.append(solucion[0])
     return costo, solucion
 
-############### EJERCICIO 2 #####################################
+##################################### EJERCICIO 2 #####################################
 
 def costo_tour(G, tour): # O(n)
-    #Calcula la longitud total del camino en un grafo G
+    #Calcula el costo total del tour 
     costo = 0
     n = len(tour)
     for i in range(n - 1):
@@ -148,11 +139,11 @@ def costo_tour(G, tour): # O(n)
 
 '''Busqueda local 1: 2-OPT'''
 def do_2opt(tour, i, j): # O(n)
-    #Realiza un intercambio 2-opt en el camino
+    #Realiza un intercambio 2-opt
     tour[i+1:j+1] = reversed(tour[i+1:j+1])
 
 def atsp_2opt(G, tour_inicial): # O(n^4)
-    #Aplica el operador 2-opt para ATSP en un grafo G y un camino inicial
+    #Aplica el operador 2-opt para ATSP en un grafo G y un tour inicial
     n = len(tour_inicial) 
     tour_actual = tour_inicial.copy()
     costo_actual = costo_tour(G, tour_actual)
@@ -186,6 +177,7 @@ def relocate(G, tour): # O(n^4)
         mejora = False
         for i in range(1, n-2):
             for j in range(i+1, n-1):
+                # Intenta reubicar el nodo en la posición i en la posición j del tour
                 nuevo_tour = tour[:i] + tour[i+1:j] + [tour[i]] + tour[j:]
                 if costo_tour(G, nuevo_tour) < costo_tour(G, tour):
                     tour = nuevo_tour[:]
@@ -193,9 +185,9 @@ def relocate(G, tour): # O(n^4)
     return tour, costo_tour(G, tour)
 
 
-################ EJERCICIO 3 #############################
+##################################### EJERCICIO 3 #####################################
+
 def goloso_con_busqueda_local_2opt(G, nodo_inicial, heuristica_constructiva): # O(n^4)
-    
     if heuristica_constructiva == "vecino_mas_cercano": 
         inicio = time.time()
         tour_inicial = vecino_mas_cercano(G, nodo_inicial)  # O(n^2)
@@ -207,7 +199,6 @@ def goloso_con_busqueda_local_2opt(G, nodo_inicial, heuristica_constructiva): # 
 
     # Búsqueda local 2-opt
     tour_mejorado_2opt, costo_mejorada_2opt = atsp_2opt(G, tour_inicial)  # O(n^4)
-    # print("Tour mejorado con 2-opt:", tour_mejorado_2opt)
     print("costo ej3 con 2-opt:", costo_mejorada_2opt)
     print("Tiempo 2opt:", time.time() - inicio, "segundos")
     
@@ -226,17 +217,15 @@ def goloso_con_busqueda_local_relocate(G, nodo_inicial, heuristica_constructiva)
 
     # Búsqueda local relocate
     tour_mejorado_relocate, costo_mejorada_relocate = relocate(G, tour_inicial)  # O(n^4)
-    # print("Tour mejorado con relocate:", tour_mejorado_relocate)
     print("costo ej3 con relocate:", costo_mejorada_relocate)
     print("Tiempo ej3 relocate:", time.time() -inicio, "segundos")
    
     
 
 
-####################### para experimentacion ###########################################
+####################### Para la experimentacion ###########################################
 
-
-def VND(G, tour): #clase metaheuristica # O(n^4)
+def VND(G, tour): # O(n^4)
     k_max = 2
     k = 0
     while k < k_max:
@@ -273,11 +262,10 @@ def atsp_to_tsp(G):
 
 
 
-# Ejemplo de uso
 def main():
 
-
-    # Ejemplo de uso:
+    # Elejir instancia:
+    
     # filename = 'br17.atsp'
     # filename = 'ft53.atsp'
     # filename = 'ft70.atsp'
@@ -300,20 +288,16 @@ def main():
     
     matrix, dimension = atsp_file(filename)
     G = create_graph_from_matrix(matrix, dimension)
-
     tour_inicial = tour_hamiltoniano_basico(G)
 
-    # Verificar G
-    print("Nodos en G:", G.nodes)
-
    
-    # Medir tiempo para ATSP insertion algorithm
+    # Medir tiempo para Inserción 
     inicio = time.time()
     cost, solucion = atsp_insercion(G)
     print("El costo mínimo es atsp insercion:", cost)
     print("Tiempo de ejecución de atsp insercion:", time.time() - inicio, "segundos")
 
-    # Medir tiempo para Nearest neighbor algorithm
+    # Medir tiempo para veciono mas cercano
     inicio = time.time()
     tour = vecino_mas_cercano(G, 0)
     costo = costo_tour(G, tour)
@@ -334,13 +318,13 @@ def main():
     print("VND costo con vecino:", cost_vnd)
     print("Tiempo de ejecución de VND con vecino:", time.time() - inicio, "segundos")
 
-    # Medir tiempo para goloso_con_busqueda_local AI
-    print("Tiempo de ejecución de goloso con búsqueda local AI:")
+    # Medir tiempo para goloso_con_busqueda_local Inserción
+    print("Tiempo de ejecución de goloso con búsqueda local Inserción:")
     goloso_con_busqueda_local_2opt(G, 0, "atsp_insercion")
     goloso_con_busqueda_local_relocate(G, 0, "atsp_insercion")
     
 
-    # Medir tiempo para goloso_con_busqueda_local VC
+    # Medir tiempo para goloso_con_busqueda_local vecino mas cercano
     print("Tiempo de ejecución de goloso con búsqueda local VC:")
     goloso_con_busqueda_local_2opt(G, 0, "vecino_mas_cercano")
     goloso_con_busqueda_local_relocate(G, 0, "vecino_mas_cercano")
