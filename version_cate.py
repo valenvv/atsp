@@ -310,26 +310,33 @@ def main():
     print("Tiempo de ejecución de vecino cercano:", time.time() - inicio, "segundos")
 
 
-    initial_path = tour_hamiltoniano_basico(G)
+    # initial_path = tour_hamiltoniano_basico(G)
    
 
-    # Medir tiempo para 2-opt para ATSP
-    inicio = time.time()
-    optimal_path, optimal_length = atsp_2opt(G, initial_path)
-    print("Longitud mínima 2opt:", optimal_length)
-    print("Tiempo de ejecución de 2opt:", time.time() - inicio, "segundos")
+    # # Medir tiempo para 2-opt para ATSP
+    # inicio = time.time()
+    # optimal_path, optimal_length = atsp_2opt(G, initial_path)
+    # print("Longitud mínima 2opt:", optimal_length)
+    # print("Tiempo de ejecución de 2opt:", time.time() - inicio, "segundos")
 
-    # Medir tiempo para optimal_path2, optimal_length2 = relocate(G, initial_path)
-    inicio = time.time()
-    optimal_path2, optimal_length2 =relocate(G, initial_path)
-    print("Longitud mínima relocate:", optimal_length2)
-    print("Tiempo de ejecución de relocate:", time.time() - inicio, "segundos")
+    # # Medir tiempo para optimal_path2, optimal_length2 = relocate(G, initial_path)
+    # inicio = time.time()
+    # optimal_path2, optimal_length2 =relocate(G, initial_path)
+    # print("Longitud mínima relocate:", optimal_length2)
+    # print("Tiempo de ejecución de relocate:", time.time() - inicio, "segundos")
 
-    # Medir tiempo para VND
+    # Medir tiempo para VND - Inserción
     inicio = time.time()
     vnd, cost_vnd = VND(G, solucion)
-    print("VND costo:", cost_vnd)
-    print("Tiempo de ejecución de VND:", time.time() - inicio, "segundos")
+    print("VND costo con Inserción:", cost_vnd)
+    print("Tiempo de ejecución de VND Inserción:", time.time() - inicio, "segundos")
+
+    # Medir tiempo para VND - vecino mas cercano
+    solucion2 = vecino_mas_cercano(G,0)
+    inicio = time.time()
+    vnd, cost_vnd = VND(G, solucion2)
+    print("VND costo con vecino:", cost_vnd)
+    print("Tiempo de ejecución de VND con vecino:", time.time() - inicio, "segundos")
 
     # Medir tiempo para goloso_con_busqueda_local
     inicio = time.time()
