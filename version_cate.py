@@ -306,14 +306,7 @@ def main():
     # Verificar G
     print("Nodos en G:", G.nodes)
 
-    ############### ej EXTRA #######################
-    # Reducir el ATSP a un TSP
-    # G_tsp = atsp_to_tsp(G)
-    # tour_inicial = list(G_tsp.nodes)
-    # tour_final, costo_final = tsp_2opt(G_tsp, tour_inicial)
-    # print("Costo final:", costo_final)
-    
-    
+   
     # Medir tiempo para ATSP insertion algorithm
     inicio = time.time()
     cost, solucion = atsp_insercion(G)
@@ -327,21 +320,6 @@ def main():
     print("El costo mínimo es vecino cercano:", costo)
     print("Tiempo de ejecución de vecino cercano:", time.time() - inicio, "segundos")
 
-
-    # initial_path = tour_hamiltoniano_basico(G)
-   
-
-    # # Medir tiempo para 2-opt para ATSP
-    # inicio = time.time()
-    # optimal_path, optimal_length = atsp_2opt(G, initial_path)
-    # print("Longitud mínima 2opt:", optimal_length)
-    # print("Tiempo de ejecución de 2opt:", time.time() - inicio, "segundos")
-
-    # # Medir tiempo para optimal_path2, optimal_length2 = relocate(G, initial_path)
-    # inicio = time.time()
-    # optimal_path2, optimal_length2 =relocate(G, initial_path)
-    # print("Longitud mínima relocate:", optimal_length2)
-    # print("Tiempo de ejecución de relocate:", time.time() - inicio, "segundos")
 
     # Medir tiempo para VND - Inserción
     inicio = time.time()
