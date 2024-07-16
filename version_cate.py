@@ -8,6 +8,7 @@ import copy
 import numpy as np
 import time
 
+# Función para extraer la matriz de pesos de un archivo ATSP y construir un grafo dirigido con NetworkX
 def atsp_file(filename):
     with open(filename, 'r') as file:
         lines = file.readlines()
@@ -194,9 +195,12 @@ def relocate(G, tour): # O(n^4)
 
 ################ EJERCICIO 3 #############################
 def goloso_con_busqueda_local(G, nodo_inicial, heuristica_constructiva): # O(n^4)
+    
     if heuristica_constructiva == "vecino_mas_cercano": 
+        inicio = time.time()
         tour_inicial = vecino_mas_cercano(G, nodo_inicial)  # O(n^2)
     elif heuristica_constructiva == "atsp_insercion":
+        inicio = time.time()
         costo, tour_inicial = atsp_insercion(G)  # O(n^3)
     else:
         raise ValueError("Heurística constructiva no válida.")
@@ -205,12 +209,14 @@ def goloso_con_busqueda_local(G, nodo_inicial, heuristica_constructiva): # O(n^4
     tour_mejorado_2opt, costo_mejorada_2opt = atsp_2opt(G, tour_inicial)  # O(n^4)
     # print("Tour mejorado con 2-opt:", tour_mejorado_2opt)
     print("costo ej3 con 2-opt:", costo_mejorada_2opt)
+    print("Tiempo 2opt:", time.time() - inicio, "segundos")
     
 
     # Búsqueda local relocate
     tour_mejorado_relocate, costo_mejorada_relocate = relocate(G, tour_inicial)  # O(n^4)
     # print("Tour mejorado con relocate:", tour_mejorado_relocate)
     print("costo ej3 con relocate:", costo_mejorada_relocate)
+    print("Tiempo relocate:", time.time() - inicio, "segundos")
    
     
 
@@ -266,13 +272,13 @@ def main():
     # filename = 'ftv33.atsp'  
     # filename = 'ftv35.atsp'
     # filename = 'ftv38.atsp'
-    filename = 'ftv44.atsp'  
+    # filename = 'ftv44.atsp'  
     # filename = 'ftv47.atsp'
     # filename = 'ftv55.atsp'
     # filename = 'ftv64.atsp'
     # filename = 'ftv70.atsp'
     # filename = 'ftv170.atsp'  
-    # filename = 'kro124p.atsp' 
+    filename = 'kro124p.atsp' 
     # filename = 'p43.atsp'      
     # filename = 'rbg323.atsp'
     # filename = 'rbg358.atsp'
