@@ -1,0 +1,13 @@
+NAME: small_instance
+TYPE: ATSP
+COMMENT: Small 4-node instance with asymmetric weights
+DIMENSION: 4
+EDGE_WEIGHT_TYPE: EXPLICIT
+EDGE_WEIGHT_FORMAT: FULL_MATRIX
+EDGE_WEIGHT_SECTION
+ 9999   10   5   20
+   5  9999   25   20
+  40   35  9999   45
+  50   10   60  9999
+EOF
+

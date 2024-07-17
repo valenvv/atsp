@@ -127,7 +127,6 @@ def atsp_insercion(G, mas_cercano=True): # O(n^3)
 ##################################### EJERCICIO 2 #####################################
 
 def costo_tour(G, tour): # O(n)
-    #Calcula el costo total del tour 
     costo = 0
     n = len(tour)
     for i in range(n - 1):
@@ -244,22 +243,44 @@ def VND(G, tour): # O(n^4)
 ############## ejercicio extra #######################
 ''' Reduccion de ATSP a TSP'''
 def atsp_to_tsp(G):
-    # Crear un nuevo grafo para el TSP
+    # Crear un nuevo grafo para TSP
     G_tsp = nx.Graph()
 
-    # Para cada nodo en el grafo del ATSP, crea dos nodos en el grafo del TSP
+    # Para cada nodo en el grafo ATSP, crea dos nodos en el grafo TSP
     for node in G.nodes:
         G_tsp.add_node(f"{node}_in")
         G_tsp.add_node(f"{node}_out")
+        G_tsp.add_edge(f"{node}_in", f"{node}_out", weight=0)
 
-    # Para cada arista en el grafo del ATSP, agrega dos aristas en el grafo del TSP
+    # Para cada arista en el grafo ATSP, agrega dos aristas en el grafo TSP
     for u, v, data in G.edges(data=True):
         w = data['weight']
         G_tsp.add_edge(f"{u}_out", f"{v}_in", weight=w)
-        G_tsp.add_edge(f"{u}_in", f"{u}_out", weight=0)
 
     return G_tsp
 
+
+def visualize_graphs(G_atsp, G_tsp):
+    plt.figure(figsize=(12, 5))
+
+    # Visualización del grafo ATSP
+    plt.subplot(1, 2, 1)
+    pos = nx.spring_layout(G_atsp)
+    labels = nx.get_edge_attributes(G_atsp, 'weight')
+    nx.draw(G_atsp, pos, with_labels=True, node_color='lightblue', node_size=500, font_size=10, font_weight='bold')
+    nx.draw_networkx_edge_labels(G_atsp, pos, edge_labels=labels)
+    plt.title('Grafo ATSP')
+
+    # Visualización del grafo TSP transformado
+    plt.subplot(1, 2, 2)
+    pos_tsp = nx.spring_layout(G_tsp)
+    labels_tsp = nx.get_edge_attributes(G_tsp, 'weight')
+    nx.draw(G_tsp, pos_tsp, with_labels=True, node_color='lightgreen', node_size=500, font_size=10, font_weight='bold')
+    nx.draw_networkx_edge_labels(G_tsp, pos_tsp, edge_labels=labels_tsp)
+    plt.title('Grafo TSP Transformado')
+
+    plt.tight_layout()
+    plt.show()
 
 
 def main():
@@ -277,7 +298,7 @@ def main():
     # filename = 'ftv55.atsp'
     # filename = 'ftv64.atsp'
     # filename = 'ftv70.atsp'
-    filename = 'ftv170.atsp'  
+    # filename = 'ftv170.atsp'  
     # filename = 'kro124p.atsp' 
     # filename = 'p43.atsp'      
     # filename = 'rbg323.atsp'
@@ -285,12 +306,12 @@ def main():
     # filename = 'rbg403.atsp'
     # filename = 'rbg443.atsp'
     # filename = 'ry48p.atsp' 
+    filename ='ejerextra.txt'
     
     matrix, dimension = atsp_file(filename)
     G = create_graph_from_matrix(matrix, dimension)
     tour_inicial = tour_hamiltoniano_basico(G)
 
-   
     # Medir tiempo para Inserción 
     inicio = time.time()
     cost, solucion = atsp_insercion(G)
@@ -328,6 +349,14 @@ def main():
     print("Tiempo de ejecución de goloso con búsqueda local VC:")
     goloso_con_busqueda_local_2opt(G, 0, "vecino_mas_cercano")
     goloso_con_busqueda_local_relocate(G, 0, "vecino_mas_cercano")
+
+
+    '''
+    ### EJER extra ###
+    # Transformar grafo ATSP a grafo TSP
+    G_tsp = atsp_to_tsp(G)
+    visualize_graphs(G, G_tsp)
+    '''
     
 
 if __name__ == "__main__":
