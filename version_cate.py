@@ -287,7 +287,7 @@ def main():
 
     # Elejir instancia:
     
-    # filename = 'br17.atsp'
+    filename = 'br17.atsp'
     # filename = 'ft53.atsp'
     # filename = 'ft70.atsp'
     # filename = 'ftv33.atsp'  
@@ -306,7 +306,7 @@ def main():
     # filename = 'rbg403.atsp'
     # filename = 'rbg443.atsp'
     # filename = 'ry48p.atsp' 
-    filename ='ejerextra.txt'
+    # filename ='ejerextra.txt'
     
     matrix, dimension = atsp_file(filename)
     G = create_graph_from_matrix(matrix, dimension)
