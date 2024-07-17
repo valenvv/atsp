@@ -240,7 +240,7 @@ def VND(G, tour): # O(n^4)
             k += 1
     return tour, costo_tour(G, tour)
 
-############## ejercicio extra #######################
+############## Ejercicio extra #######################
 ''' Reduccion de ATSP a TSP'''
 def atsp_to_tsp(G):
     # Crear un nuevo grafo para TSP
