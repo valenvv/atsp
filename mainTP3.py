@@ -106,7 +106,7 @@ def insertar_nodo(v, G, solucion): # O(n)
 
 def atsp_insercion(G, mas_cercano=True): # O(n^3)
     visitado = {node: False for node in G.nodes}
-    # Comenzar con un ciclo inicial de tres nodos
+    # comienza con un ciclo inicial de tres nodos
     solucion = [0, 1, 2]
     visitado[0] = visitado[1] = visitado[2] = True
     costo = G[0][1]['weight'] + G[1][2]['weight'] + G[2][0]['weight']
@@ -260,7 +260,7 @@ def atsp_to_tsp(G):
     return G_tsp
 
 
-def visualize_graphs(G_atsp, G_tsp):
+def visualizar_grafo(G_atsp, G_tsp):
     plt.figure(figsize=(12, 5))
 
     # Visualización del grafo ATSP
@@ -355,7 +355,7 @@ def main():
     ### EJER extra ###
     # Transformar grafo ATSP a grafo TSP
     G_tsp = atsp_to_tsp(G)
-    visualize_graphs(G, G_tsp)
+    visualizar_grafo(G, G_tsp)
     '''
     
 
