@@ -286,27 +286,8 @@ def visualizar_grafo(G_atsp, G_tsp):
 def main():
 
     # Elejir instancia:
-    
     filename = 'br17.atsp'
-    # filename = 'ft53.atsp'
-    # filename = 'ft70.atsp'
-    # filename = 'ftv33.atsp'  
-    # filename = 'ftv35.atsp'
-    # filename = 'ftv38.atsp'
-    # filename = 'ftv44.atsp'  
-    # filename = 'ftv47.atsp'
-    # filename = 'ftv55.atsp'
-    # filename = 'ftv64.atsp'
-    # filename = 'ftv70.atsp'
-    # filename = 'ftv170.atsp'  
-    # filename = 'kro124p.atsp' 
-    # filename = 'p43.atsp'      
-    # filename = 'rbg323.atsp'
-    # filename = 'rbg358.atsp'
-    # filename = 'rbg403.atsp'
-    # filename = 'rbg443.atsp'
-    # filename = 'ry48p.atsp' 
-    # filename ='ejerextra.txt'
+
     
     matrix, dimension = atsp_file(filename)
     G = create_graph_from_matrix(matrix, dimension)
