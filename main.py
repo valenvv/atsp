@@ -286,7 +286,7 @@ def visualizar_grafo(G_atsp, G_tsp):
 def main():
 
     # Elejir instancia:
-    filename = 'br17.atsp'
+    filename = 'instancias/br17.atsp'
 
     
     matrix, dimension = atsp_file(filename)
